@@ -5,6 +5,10 @@ from settings import TAXONOMY_TABLE_NAME, SAMPLES_TABLE_NAME
 class CreateTaxonomyTable:
     @staticmethod
     def run():
+        """
+        Создание таблицы taxonomy
+        """
+
         Migration.run(f'''
         CREATE TABLE {TAXONOMY_TABLE_NAME} (
         id serial PRIMARY KEY,

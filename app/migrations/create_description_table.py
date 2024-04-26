@@ -5,6 +5,10 @@ from settings import DESCRIPTIONS_TABLE_NAME, SAMPLES_TABLE_NAME
 class CreateDescriptionTable:
     @staticmethod
     def run():
+        """
+        Создание таблицы descriptions
+        """
+
         Migration.run(f'''
         CREATE TABLE {DESCRIPTIONS_TABLE_NAME} (
         id serial PRIMARY KEY,

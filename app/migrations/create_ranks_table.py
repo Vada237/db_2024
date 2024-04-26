@@ -5,6 +5,10 @@ from settings import RANKS_TABLE_NAME, TAXONOMY_TABLE_NAME
 class CreateRanksTable:
     @staticmethod
     def run():
+        """
+        Создание таблицы ranks
+        """
+
         Migration.run(f'''
         CREATE TABLE {RANKS_TABLE_NAME} (
         id serial PRIMARY KEY,

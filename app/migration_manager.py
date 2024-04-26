@@ -8,6 +8,9 @@ from app.migrations.migration import Migration
 class MigrationManager:
     @staticmethod
     def run_migrations():
+        """
+        Запуск миграций, осторожнее с порядком
+        """
         CreateSampleTable.run()
         CreateDescriptionTable.run()
         CreateTaxonomyTable.run()
@@ -15,5 +18,8 @@ class MigrationManager:
 
     @staticmethod
     def refresh():
+        """
+        Рестарт миграций
+        """
         Migration.drop_all_tables()
         MigrationManager.run_migrations()
