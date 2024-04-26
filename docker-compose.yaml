@@ -1,0 +1,21 @@
+version: '2'
+services:
+  postgres:
+      build: ./docker/postgres
+      restart: always
+      container_name: lyong_postgres
+      volumes:
+          - /var/docker/postgres/data:/var/lib/postgresql/data
+      environment:
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=123
+          - POSTGRES_DB=biolab
+      ports:
+          - 5432:5432
+networks:
+  net:
+    driver: bridge
+volumes:
+  postgres:
+    driver: local
+    
