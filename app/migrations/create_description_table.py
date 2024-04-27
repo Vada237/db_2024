@@ -11,15 +11,16 @@ class CreateDescriptionTable:
 
         Migration.run(f'''
         CREATE TABLE {DESCRIPTIONS_TABLE_NAME} (
-        id serial PRIMARY KEY,
+        id serial PRIMARY KEY,        
         sample_id integer REFERENCES {SAMPLES_TABLE_NAME}(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        location text,
         coordinates_x float,
         coordinates_y float,
         soil_type text NULL,
         elevation integer NULL,
         depth float,
-        body_site text,
+        body_site text NULL,
         temprerature float,
-        pH float
+        pH float NULL
         )
         ''')

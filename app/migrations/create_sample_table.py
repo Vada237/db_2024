@@ -12,6 +12,6 @@ class CreateSampleTable:
         Migration.run(f'''
         CREATE TABLE {SAMPLES_TABLE_NAME} (
             id serial PRIMARY KEY,
-            name text
+            name text UNIQUE
         )
         ''')

@@ -2,7 +2,7 @@ from abc import ABC
 
 import psycopg2
 
-from settings import db_configuration
+from settings import db_connection
 
 
 class Migration:
@@ -13,7 +13,7 @@ class Migration:
         """
         Инициализация свойства с подключением
         """
-        with psycopg2.connect(**db_configuration) as conn:
+        with psycopg2.connect(**db_connection) as conn:
             Migration.__connection = conn
 
     @staticmethod
