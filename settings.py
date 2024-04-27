@@ -4,6 +4,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+storage_path = os.getcwd() + '/storage'
+taxonomy_path = storage_path + '/taxonomy'
+description_path = storage_path + '/descriptions'
+
 db_database = os.getenv('DB_DATABASE')
 db_user = os.getenv('DB_USERNAME')
 db_password = os.getenv('DB_PASSWORD')
@@ -24,6 +28,7 @@ RANKS_TABLE_NAME = 'ranks'
 DESCRIPTIONS_TABLE_NAME = 'descriptions'
 
 DEFAULT_TAXONOMY = ['silva', 'gtdb', 'gg2']
+DEFAULT_SAMPLES = ['Sea plant', 'Sea soil', 'Sea water']
 
 enable_migration = os.getenv('ENABLE_MIGRATION', False) == 'true'
 need_refresh = os.getenv('NEED_REFRESH', False) == 'true'
