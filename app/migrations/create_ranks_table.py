@@ -14,6 +14,7 @@ class CreateRanksTable:
         id serial PRIMARY KEY,
         taxonomy_id integer REFERENCES {TAXONOMY_TABLE_NAME}(id) ON DELETE CASCADE ON UPDATE CASCADE,
         name text,
-        value text
+        value text,
+        UNIQUE (name, value)
         )
         ''')

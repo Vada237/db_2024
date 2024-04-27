@@ -14,13 +14,13 @@ class CreateDescriptionTable:
         id serial PRIMARY KEY,        
         sample_id integer REFERENCES {SAMPLES_TABLE_NAME}(id) ON DELETE CASCADE ON UPDATE CASCADE,
         location text,
-        coordinates_x float,
-        coordinates_y float,
+        coordinates_x text,
+        coordinates_y text,
         soil_type text NULL,
         elevation integer NULL,
         depth float,
         body_site text NULL,
-        temprerature float,
+        temperature float,
         pH float NULL
         )
         ''')
