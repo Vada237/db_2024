@@ -29,8 +29,3 @@ DESCRIPTIONS_TABLE_NAME = 'descriptions'
 
 DEFAULT_TAXONOMY = ['silva', 'gtdb', 'gg2']
 DEFAULT_SAMPLES = ['Sea plant', 'Sea soil', 'Sea water']
-
-enable_migration = os.getenv('ENABLE_MIGRATION', False) == 'true'
-need_refresh = os.getenv('NEED_REFRESH', False) == 'true'
-enable_parser = os.getenv('ENABLE_PARSER', False) == 'true'
-run_application = os.getenv('RUN_APPLICATION', False) == 'true'
