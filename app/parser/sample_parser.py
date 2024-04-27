@@ -11,5 +11,8 @@ class SampleParser(Parser):
     def _write_to_db(self, data: list[tuple]) -> None:
         with psycopg2.connect(**db_connection) as conn:
             cursor = conn.cursor()
-            cursor.executemany(f'''INSERT INTO {SAMPLES_TABLE_NAME} (name) VALUES (%s)''', data)
+            cursor.executemany(f'''
+            INSERT INTO {SAMPLES_TABLE_NAME} (name) VALUES (%s)
+            ON CONFLICT (name) DO NOTHING
+            ''', data)
             conn.commit()
