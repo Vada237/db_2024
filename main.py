@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/database/refresh', methods=['POST'])
 def refresh_database():
     MigrationManager.refresh()
-    return 'База данных успешно перезаписана'
+    return 'База данных успешно пересоздана'
 
 
 @app.route('/database/migrate', methods=['POST'])
