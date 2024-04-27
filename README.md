@@ -5,5 +5,5 @@
 <li>pip install pandas</li>
 <li>pip install psycopg2 или pip install psycopg2-binary</li>
 <li>pip install flask</li>
-<li>pip install dotenv</li>
+<li>pip install python-dotenv</li>
 </ul>
