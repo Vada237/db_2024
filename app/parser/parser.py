@@ -1,9 +1,14 @@
+import os
 from abc import ABC
 from typing import Union
 
+import psycopg2
+
+from settings import db_connection
+
 
 class Parser(ABC):
-    def start_parse(self, filepath: str = None) -> None:
+    def start_parse(self, filepath: Union[str, os.PathLike] = None) -> None:
         data = self._parse_data(filepath)
         self._write_to_db(data)
 

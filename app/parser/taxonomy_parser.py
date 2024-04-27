@@ -3,7 +3,7 @@ from typing import Union
 import psycopg2
 
 from app.parser.parser import Parser
-from settings import db_connection, SAMPLES_TABLE_NAME, DEFAULT_TAXONOMY
+from settings import db_connection, SAMPLES_TABLE_NAME, DEFAULT_TAXONOMY, TAXONOMY_TABLE_NAME
 
 
 class TaxonomyParser(Parser):
@@ -17,7 +17,12 @@ class TaxonomyParser(Parser):
         return data_to_insert
 
     def _write_to_db(self, data: any) -> None:
-        super()._write_to_db(data)
+        with psycopg2.connect(**db_connection) as conn:
+            cursor = conn.cursor()
+            cursor.executemany(f'''
+            INSERT INTO {TAXONOMY_TABLE_NAME} (sample_id, name) values (%s, %s)
+            ''', data)
+            conn.commit()
 
     @staticmethod
     def __get_sample_ids() -> list[int]:
