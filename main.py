@@ -20,7 +20,7 @@ def start_migrate():
     return 'Миграции выполнены успешно'
 
 
-@app.route('/database/parse', methods=['GET'])
+@app.route('/database/parse', methods=['POST'])
 def start_parse():
     parser_manager.start()
     return 'Таблицы заполнены'
