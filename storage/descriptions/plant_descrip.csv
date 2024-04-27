@@ -1,0 +1,4 @@
+location,coordinates x,coordinates y,soil_type,elevation,depth,body_site,temperature,pH
+Еремеевский риф,66.55116N,33.11571E,,,0.00,surface,9.70,7.70
+Еремеевский риф,66.5519N,33.1154E,,,0.00,surface,9.40,7.85
+Кислая бухта,66.53506N,33.08687E,,,0.00,surface,10.90,7.18
