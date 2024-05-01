@@ -21,7 +21,7 @@ class Repository:
             Repository.__connection = conn
 
     @staticmethod
-    def get_descriptions():
+    def get_descriptions(offset: int = 0):
         """
         Получение всех description с названием сэмплов
         """
@@ -31,6 +31,8 @@ class Repository:
                 d.soil_type, d.elevation, d.depth, d.body_site, d.temperature, d.ph
             FROM {DESCRIPTIONS_TABLE_NAME} as d
             INNER JOIN {SAMPLES_TABLE_NAME} as s on d.sample_id = s.id
+            ORDER BY d.id ASC
+            LIMIT {ROW_COUNT} OFFSET {offset * ROW_COUNT}
             ''')
 
     @staticmethod
@@ -71,6 +73,39 @@ class Repository:
         Получение всех samples
         """
         return Repository.__execute_select_query(f'''SELECT * FROM {SAMPLES_TABLE_NAME}''')
+
+    @staticmethod
+    def create_description(params: tuple) -> None:
+        """
+        Создать информацию об образце
+        """
+        return Repository.__execute_other_query(f'''
+        INSERT INTO {DESCRIPTIONS_TABLE_NAME} (
+        sample_id, location, coordinates_x, coordinates_y, soil_type, elevation, depth, body_site, temperature, ph 
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ''', params)
+
+    @staticmethod
+    def create_rank(params: tuple):
+        """
+        Создать rank
+        """
+        return Repository.__execute_other_query(f'''
+        INSERT INTO {RANKS_TABLE_NAME} (taxonomy_id, name, value) VALUES (%s, %s, %s)
+        ON CONFLICT (name, value) DO NOTHING
+        ''', params)
+
+    @staticmethod
+    def update_description_by_id(_id: int, params: list) -> None:
+        """
+        Обновить информацию по id
+        """
+        Repository.__execute_other_query(f'''
+        UPDATE {DESCRIPTIONS_TABLE_NAME}
+        SET sample_id = %s, location = %s, coordinates_x = %s, coordinates_y = %s,
+        soil_type = %s, elevation = %s, depth = %s, body_site = %s, temperature = %s, ph = %s
+        WHERE id = %s
+        ''', tuple(params + [_id]))
 
     @staticmethod
     def update_rank_by_id(_id: int, params: tuple) -> None:
