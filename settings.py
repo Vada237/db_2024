@@ -29,3 +29,5 @@ DESCRIPTIONS_TABLE_NAME = 'descriptions'
 
 DEFAULT_TAXONOMY = ['silva', 'gtdb', 'gg2']
 DEFAULT_SAMPLES = ['Sea plant', 'Sea soil', 'Sea water']
+
+ROW_COUNT = 10
