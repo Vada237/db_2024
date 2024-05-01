@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание информации об образце</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row-cols-2">
+        <div class="col-6 mt-4">
+            <h1>Создать информацию об образцe</h1>
+            <form action="/descriptions/create" method="post">
+                <div class="form-group">
+                    <label>Местоположение</label>
+                    <input class="form-control mt-2" name="location"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Координаты по Х</label>
+                    <input class="form-control mt-2" name="coordinates_x"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Координаты по Y</label>
+                    <input class="form-control mt-2" name="coordinates_y"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Тип почвы</label>
+                    <input class="form-control mt-2" name="soil_type"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Высота</label>
+                    <input class="form-control mt-2" name="elevation"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Глубина</label>
+                    <input class="form-control mt-2" name="depth"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Участок тела</label>
+                    <input class="form-control mt-2" name="body_site"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Температура</label>
+                    <input class="form-control mt-2" name="temperature"/>
+                </div>
+
+                <div class="form-group">
+                    <label>pH</label>
+                    <input class="form-control mt-2" name="ph"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Образец</label>
+                    <select class="form-control mt-2" name="sample_id">
+                        <option disabled selected>Выберите образец</option>
+                        {% for item in data.samples %}
+                        <option  value="{{ item[0] }}">{{item[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Создать</button>
+                <a href="{{ url_for('descriptions') }}" class="btn btn-link mt-3">Вернуться</a>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
