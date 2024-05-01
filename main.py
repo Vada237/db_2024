@@ -7,7 +7,7 @@ from app.migration_manager import MigrationManager
 from app.migrations.migration import Migration
 from app.parser_manager import ParserManager
 from app.repository import Repository
-from settings import RANKS_TABLE_NAME, ROW_COUNT, DESCRIPTIONS_TABLE_NAME
+from settings import RANKS_TABLE_NAME, DESCRIPTIONS_TABLE_NAME
 
 app = Flask(__name__)
 
@@ -32,8 +32,58 @@ def descriptions():
     return render_template('descriptions.html', data={
         'page': page,
         'buttons': HtmlHelper.get_button_flags(count_descriptions, page),
-        'descriptions': Repository
+        'descriptions': Repository.get_descriptions(page)
     })
+
+
+@app.route('/add_description', methods=['GET'])
+def add_description():
+    return render_template('create_description.html', data={
+        'samples': Repository.get_samples()
+    })
+
+
+@app.route('/descriptions/create', methods=['POST'])
+def create_description():
+    Repository.create_description(
+        (
+            int(request.form['sample_id']),
+            request.form['location'],
+            request.form['coordinates_x'],
+            request.form['coordinates_y'],
+            HtmlHelper.str_null_to_none(request.form['soil_type']),
+            HtmlHelper.numbers_to_float(request.form['elevation']),
+            HtmlHelper.numbers_to_float(request.form['depth']),
+            request.form['body_site'],
+            HtmlHelper.numbers_to_float(request.form['temperature']),
+            HtmlHelper.numbers_to_float(request.form['ph'])
+        )
+    )
+
+    return redirect(url_for('descriptions'))
+
+
+@app.route('/edit_description/<int:description_id>', methods=['GET'])
+def edit_description(description_id: int):
+    row = Repository.get_by_id(description_id, DESCRIPTIONS_TABLE_NAME)
+    if len(row) == 0:
+        return http.HTTPStatus.NOT_FOUND
+
+    return render_template('edit_description.html', data={
+        'description': row,
+        'samples': Repository.get_samples()
+    })
+
+
+@app.route('/delete_description/<int:description_id>', methods=['GET'])
+def delete_description(description_id: int):
+    row = Repository.get_by_id(description_id, DESCRIPTIONS_TABLE_NAME)
+    if len(row) == 0:
+        return http.HTTPStatus.NOT_FOUND
+
+    Repository.delete_by_id(description_id, DESCRIPTIONS_TABLE_NAME)
+
+    return redirect(url_for('descriptions'))
 
 
 @app.route('/edit/<int:rank_id>', methods=['GET'])
@@ -49,6 +99,27 @@ def edit_rank(rank_id: int):
     })
 
 
+@app.route('/ranks/add', methods=['GET'])
+def add_ranks():
+    return render_template('create_rank.html', data={
+        'taxonomy': Repository.get_taxonomy_names(),
+        'samples': Repository.get_samples()
+    })
+
+
+@app.route('/ranks/create', methods=['POST'])
+def create_ranks():
+    taxonomy_id = Repository.get_taxonomy_id_by_name_and_sample_id(
+        request.form['taxonomy_name'], int(request.form['sample_id'])
+    )
+    if len(taxonomy_id) == 0:
+        raise Exception('Такой таксономии нет')
+    else:
+        Repository.create_rank((taxonomy_id[0], request.form['rank_name'], request.form['rank_value'],))
+
+    return redirect(url_for('ranks'))
+
+
 @app.route('/ranks/update', methods=['POST'])
 def update_rank():
     taxonomy_id = Repository.get_taxonomy_id_by_name_and_sample_id(
@@ -58,10 +129,31 @@ def update_rank():
         raise Exception('Такой таксономии нет')
     else:
         Repository.update_rank_by_id(
-            int(request.form['rank_id']), (request.form['rank_name'], request.form['rank_value'], taxonomy_id[0], )
+            int(request.form['rank_id']), (request.form['rank_name'], request.form['rank_value'], taxonomy_id[0],)
         )
 
     return redirect(url_for('ranks'))
+
+
+@app.route('/descriptions/update', methods=['POST'])
+def update_descriptions():
+    if 'sample_id' not in request.form:
+        return 'Вы не выбрали образец, вернитесь обратно и выберите образец'
+
+    Repository.update_description_by_id(int(request.form['description_id']), [
+        int(request.form['sample_id']),
+        request.form['location'],
+        request.form['coordinates_x'],
+        request.form['coordinates_y'],
+        HtmlHelper.str_null_to_none(request.form['soil_type']),
+        HtmlHelper.numbers_to_float(request.form['elevation']),
+        HtmlHelper.numbers_to_float(request.form['depth']),
+        request.form['body_site'],
+        HtmlHelper.numbers_to_float(request.form['temperature']),
+        HtmlHelper.numbers_to_float(request.form['ph'])
+    ])
+
+    return redirect(url_for('descriptions'))
 
 
 @app.route('/delete/<rank_id>', methods=['GET'])
