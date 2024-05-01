@@ -17,7 +17,7 @@ class CreateDescriptionTable:
         coordinates_x text,
         coordinates_y text,
         soil_type text NULL,
-        elevation integer NULL,
+        elevation float NULL,
         depth float,
         body_site text NULL,
         temperature float,
