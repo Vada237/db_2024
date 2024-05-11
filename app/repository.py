@@ -41,7 +41,7 @@ class Repository:
         Получение всех ranks с названием таксономий и сэмплов
         """
         return Repository.__execute_select_query(f'''
-            SELECT r.id, r.name, r.value, t.name, s.name
+            SELECT r.id, s.name, t.name, r._kingdom, r._phylum, r._class, r._order, r._family, r._genus
             FROM {RANKS_TABLE_NAME} as r
             INNER JOIN {TAXONOMY_TABLE_NAME} as t on t.id = r.taxonomy_id
             INNER JOIN {SAMPLES_TABLE_NAME} as s on s.id = t.sample_id
@@ -91,8 +91,9 @@ class Repository:
         Создать rank
         """
         return Repository.__execute_other_query(f'''
-        INSERT INTO {RANKS_TABLE_NAME} (taxonomy_id, name, value) VALUES (%s, %s, %s)
-        ON CONFLICT (name, value) DO NOTHING
+        INSERT INTO {RANKS_TABLE_NAME} (taxonomy_id, _Kingdom, _Phylum, _Class, _Order, _Family, _Genus) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (_Kingdom, _Phylum, _Class, _Order, _Family, _Genus) DO NOTHING
         ''', params)
 
     @staticmethod
@@ -114,11 +115,15 @@ class Repository:
         """
         Repository.__execute_other_query(
             f'''
-            UPDATE {RANKS_TABLE_NAME} SET name = %s, value = %s, taxonomy_id = %s 
+            UPDATE {RANKS_TABLE_NAME} SET 
+            taxonomy_id = %s, _Kingdom = %s, _Phylum = %s, _Class = %s, 
+            _Order = %s, _Family = %s, _Genus = %s
             WHERE id = %s AND NOT EXISTS (
-            SELECT 1 FROM {RANKS_TABLE_NAME} WHERE name = %s and value = %s and taxonomy_id = %s
+            SELECT 1 FROM {RANKS_TABLE_NAME} WHERE taxonomy_id = %s AND _Kingdom = %s AND _Phylum = %s AND _Class = %s
+            AND _Order = %s AND _Family = %s AND _Genus = %s
             )
-            ''', (params[0], params[1], params[2], _id, params[0], params[1], params[2])
+            ''', (params[0], params[1], params[2], params[3], params[4], params[5], params[6],
+                  _id, params[0], params[1], params[2], params[3], params[4], params[5], params[6])
         )
 
     @staticmethod

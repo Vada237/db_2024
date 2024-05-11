@@ -1,6 +1,7 @@
 import os
 from typing import Union
 
+import numpy as np
 import pandas
 import psycopg2
 
@@ -10,7 +11,7 @@ from settings import DEFAULT_TAXONOMY, db_connection, TAXONOMY_TABLE_NAME, RANKS
 
 class RankParser(Parser):
     def _parse_data(self, filepath: Union[str, os.PathLike[str]] = None) -> Union[list[tuple], None]:
-        df = pandas.read_csv(filepath)
+        df = pandas.read_csv(filepath).replace({np.nan: None})
         taxonomy_id = None
         _filepath = str(filepath)
 
@@ -20,11 +21,9 @@ class RankParser(Parser):
                 break
 
         result = []
-        headers = df.columns[1:]
-        for header in headers:
-            values = df[header].dropna().unique().tolist()
-            for value in values:
-                result.append((taxonomy_id, header, value))
+        for index, row in df.iterrows():
+            result.append((taxonomy_id, row.get('Kingdom'), row.get('Phylum'),
+                           row.get('Class'), row.get('Order'), row.get('Family'), row.get('Genus')))
 
         return result
 
@@ -32,8 +31,9 @@ class RankParser(Parser):
         with psycopg2.connect(**db_connection) as conn:
             cursor = conn.cursor()
             cursor.executemany(f'''
-            INSERT INTO {RANKS_TABLE_NAME} (taxonomy_id, name, value) VALUES (%s, %s, %s)
-            ON CONFLICT (name, value) DO NOTHING
+            INSERT INTO {RANKS_TABLE_NAME} (taxonomy_id, _Kingdom, _Phylum, _Class, _Order, _Family, _Genus) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (_Kingdom, _Phylum, _Class, _Order, _Family, _Genus) DO NOTHING
             ''', data)
             conn.commit()
 
@@ -41,7 +41,7 @@ class RankParser(Parser):
     def __get_taxonomy_id_by_name(taxonomy_name: str) -> int:
         with psycopg2.connect(**db_connection) as conn:
             cursor = conn.cursor()
-            cursor.execute(f'''SELECT id FROM {TAXONOMY_TABLE_NAME} where name = %s''', (taxonomy_name, ))
+            cursor.execute(f'''SELECT id FROM {TAXONOMY_TABLE_NAME} where name = %s''', (taxonomy_name,))
             _id = cursor.fetchone()
 
             return _id[0]
