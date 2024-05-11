@@ -10,20 +10,40 @@
 <div class="container">
     <div class="row-cols-2">
         <div class="col-6 mt-4">
-            <h1>Редактировать ранг</h1>
+            <h1>Редактировать таксономию</h1>
             <form action="/ranks/update" method="post">
                 <div class="form-group">
                     <input type="hidden" name="rank_id" value="{{ data.rank[0] }}"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Название ранга</label>
-                    <input class="form-control mt-2" name="rank_name" value="{{ data.rank[2] }}"/>
+                    <label>Kingdom</label>
+                    <input class="form-control mt-2" name="_kingdom" value="{{ data.rank[2] }}"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Значение ранга</label>
-                    <input class="form-control mt-2" name="rank_value" value="{{ data.rank[3] }}"/>
+                    <label>Phylum</label>
+                    <input class="form-control mt-2" name="_phylum" value="{{ data.rank[3] }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Class</label>
+                    <input class="form-control mt-2" name="_class" value="{{ data.rank[4] }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Order</label>
+                    <input class="form-control mt-2" name="_order" value="{{ data.rank[5] }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Family</label>
+                    <input class="form-control mt-2" name="_family" value="{{ data.rank[6] }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Family</label>
+                    <input class="form-control mt-2" name="_genus" value="{{ data.rank[7] }}"/>
                 </div>
 
                 <div class="form-group">

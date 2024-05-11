@@ -13,8 +13,12 @@ class CreateRanksTable:
         CREATE TABLE {RANKS_TABLE_NAME} (
         id serial PRIMARY KEY,
         taxonomy_id integer REFERENCES {TAXONOMY_TABLE_NAME}(id) ON DELETE CASCADE ON UPDATE CASCADE,
-        name text,
-        value text,
-        UNIQUE (name, value)
+        _Kingdom text,
+        _Phylum text,
+        _Class text,
+        _Order text,
+        _Family text,
+        _Genus text,
+        UNIQUE (_Kingdom, _Phylum, _Class, _Order, _Family, _Genus)
         )
         ''')

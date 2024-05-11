@@ -10,16 +10,36 @@
 <div class="container">
     <div class="row-cols-2">
         <div class="col-6 mt-4">
-            <h1>Создать ранг</h1>
+            <h1>Создать таксономию</h1>
             <form action="/ranks/create" method="post">
                 <div class="form-group">
-                    <label>Название ранга</label>
-                    <input class="form-control mt-2" name="rank_name"/>
+                    <label>Kingdom</label>
+                    <input class="form-control mt-2" name="_kingdom"/>
                 </div>
 
                 <div class="form-group">
-                    <label>Значение ранга</label>
-                    <input class="form-control mt-2" name="rank_value"/>
+                    <label>Phylum</label>
+                    <input class="form-control mt-2" name="_phylum"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Class</label>
+                    <input class="form-control mt-2" name="_class"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Order</label>
+                    <input class="form-control mt-2" name="_order"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Family</label>
+                    <input class="form-control mt-2" name="_family"/>
+                </div>
+
+                <div class="form-group">
+                    <label>Genus</label>
+                    <input class="form-control mt-2" name="_genus"/>
                 </div>
 
                 <div class="form-group">
