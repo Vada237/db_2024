@@ -115,7 +115,15 @@ def create_ranks():
     if len(taxonomy_id) == 0:
         raise Exception('Такой таксономии нет')
     else:
-        Repository.create_rank((taxonomy_id[0], request.form['rank_name'], request.form['rank_value'],))
+        Repository.create_rank((
+            taxonomy_id[0],
+            request.form['_kingdom'],
+            request.form['_phylum'],
+            request.form['_class'],
+            request.form['_order'],
+            request.form['_family'],
+            request.form['_genus']
+        ))
 
     return redirect(url_for('ranks'))
 
@@ -129,7 +137,15 @@ def update_rank():
         raise Exception('Такой таксономии нет')
     else:
         Repository.update_rank_by_id(
-            int(request.form['rank_id']), (request.form['rank_name'], request.form['rank_value'], taxonomy_id[0],)
+            int(request.form['rank_id']), (
+                taxonomy_id[0],
+                request.form['_kingdom'],
+                request.form['_phylum'],
+                request.form['_class'],
+                request.form['_order'],
+                request.form['_family'],
+                request.form['_genus']
+            )
         )
 
     return redirect(url_for('ranks'))
