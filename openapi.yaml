@@ -1,0 +1,368 @@
+openapi: 3.0.1
+info:
+  title: Biolab
+  version: 1.0.0
+
+tags:
+  - name: taxonomy
+    description: CRUD для таксономий
+  - name: description
+    description: CRUD для информации об образцах
+  - name: database
+    description: Прочие маршруты, не связанные с выполнением проекта
+  - name: global
+    description: Главный маршрут в котором лежат ссылки на страницы
+  
+paths:
+  /:
+    get:
+      tags: 
+       - global
+      responses:
+        '200':
+          description: Возвращает список страниц
+  
+  /database/migrate:
+    post:
+      tags:
+        - database
+      description: Сгенерировать схему базы данных
+      responses:
+        '200':
+          description: Миграции выполнены успешно
+  /database/refresh:
+    post:
+      tags:
+        - database
+      description: Пересоздать схему базы данных
+      responses:
+        '200':
+          description: База данных успешно пересоздана
+  /database/parse:
+    post:
+      tags:
+        - database
+      description: Заполнить базу данных информацией
+      responses:
+        '200':
+          description: Таблицы заполнены
+  /descriptions:
+    get:
+      tags:
+        - description
+      responses:
+        '200':
+          description: Возвращает список описаний об образцах
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Description'
+  /add_description:
+    get:
+      tags:
+        - description
+      responses:
+        '200':
+          description: Возвращает форму для создания информации об образце
+          
+  /descriptions/create:
+    post:
+      tags:
+        - description
+      requestBody:
+        description: Параметры, необходимые для создания информации об образце
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sample:
+                  type: string
+                location:
+                  type: string
+                coordinates_x:
+                  type: string
+                coordinates_y:
+                  type: string
+                soil_type:
+                  type: string
+                  nullable: true
+                elevation:
+                  type: number
+                  nullable: true
+                depth:
+                  type: number
+                  nullable: true
+                body_site:
+                  type: string
+                  nullable: true
+                temperature:
+                  type: number
+                pH:
+                  type: number
+      responses:
+        '200': 
+          description: Создана запись об информации об образце, перенаправляет в маршрут /descriptions
+          
+  /edit_description/{description_id}:
+    get:
+      tags:
+        - description
+      parameters:
+        - name: description_id
+          description: id информации об образце
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Перенаправляет на форму редактирования информации об образце
+  
+  /delete_description/{description_id}:
+    get:
+      tags:
+        - description
+      parameters:
+        - name: description_id
+          description: id информации об образце
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Удаляет запись об информации об образце
+  
+  /descriptions/update:
+    post:
+      tags:
+        - description
+      requestBody:
+        description: Параметры, необходимые для обновления информации об образце
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description_id:
+                  type: string
+                sample:
+                  type: string
+                location:
+                  type: string
+                coordinates_x:
+                  type: string
+                coordinates_y:
+                  type: string
+                soil_type:
+                  type: string
+                  nullable: true
+                elevation:
+                  type: number
+                  nullable: true
+                depth:
+                  type: number
+                  nullable: true
+                body_site:
+                  type: string
+                  nullable: true
+                temperature:
+                  type: number
+                pH:
+                  type: number
+      responses:
+        '200': 
+          description: Обновляет запись с информацией об образце
+  /ranks:
+    get:
+      tags:
+        - taxonomy
+      responses:
+        '200':
+          description: Возвращает список таксономий
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Taxonomy'
+  /ranks/add:
+    get:
+      tags:
+        - taxonomy
+      responses:
+        '200':
+          description: Возвращает форму для создания таксономии
+  /ranks/create:
+    post:
+      tags:
+        - taxonomy
+      requestBody:
+        description: Параметры, необходимые для создания таксономии
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                sample:
+                  type: string
+                taxonomy:
+                  type: string
+                kingdom:
+                  type: string
+                  nullable: true
+                phylum:
+                  type: string
+                  nullable: true
+                class:
+                  type: string
+                  nullable: true
+                order:
+                  type: number
+                  nullable: true
+                family:
+                  type: number
+                  nullable: true
+                genus:
+                  type: string
+                  nullable: true
+      responses:
+        '200': 
+          description: Создана запись о таксономии, перенаправляет в маршрут /ranks
+  
+  /edit/{rank_id}:
+    get:
+      tags:
+        - taxonomy
+      parameters:
+        - name: rank_id
+          description: id таксономии
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Перенаправляет на форму редактирования таксономии
+  
+  /ranks/update:
+    post:
+      tags:
+        - taxonomy
+      requestBody:
+        description: Параметры, необходимые для создания таксономии
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                sample:
+                  type: string
+                taxonomy:
+                  type: string
+                kingdom:
+                  type: string
+                  nullable: true
+                phylum:
+                  type: string
+                  nullable: true
+                class:
+                  type: string
+                  nullable: true
+                order:
+                  type: number
+                  nullable: true
+                family:
+                  type: number
+                  nullable: true
+                genus:
+                  type: string
+                  nullable: true
+      responses:
+        '200':
+          description: Обновляет запись о таксономии, перенаправляет на маршрут /ranks
+          
+  /delete/{rank_id}:
+    get:
+      tags:
+        - taxonomy
+      parameters:
+        - name: rank_id
+          description: id таксономии
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200': 
+          description: Удаляет запись о таксономии
+
+components:
+  schemas:
+    Description:
+      type: object
+      properties:
+        id:
+          type: integer
+        sample:
+          type: string
+        location:
+          type: string
+        coordinates_x:
+          type: string
+        coordinates_y:
+          type: string
+        soil_type:
+          type: string
+          nullable: true
+        elevation:
+          type: number
+          nullable: true
+        depth:
+          type: number
+          nullable: true
+        body_site:
+          type: string
+          nullable: true
+        temperature:
+          type: number
+        pH:
+          type: number
+    Taxonomy:
+      type: object
+      properties:
+        id:
+          type: integer
+        sample:
+          type: string
+        taxonomy:
+          type: string
+        kingdom:
+          type: string
+          nullable: true
+        phylum:
+          type: string
+          nullable: true
+        class:
+          type: string
+          nullable: true
+        order:
+          type: number
+          nullable: true
+        family:
+          type: number
+          nullable: true
+        genus:
+          type: string
+          nullable: true
+      
+      
+      
+        
